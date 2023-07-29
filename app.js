@@ -20,10 +20,9 @@ app.set('views', path.join(__dirname, 'views'))
 app.get('/', (req, res) => {
   res.render('home')
 })
-app.get('/makeblogpost', async (req, res) => {
-  const post = new BlogPost({title: 'For Loops', subTitle: "And all the other loops"});
-  await post.save();
-  res.send(post)
+app.get('/blogposts', async (req, res) => {
+  const blogposts = await BlogPost.find({})
+  res.render('blogposts/index', {blogposts})
 })
 
 app.listen(3000, () => {
