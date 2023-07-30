@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
+const methodOverride = require('method-override');
 const BlogPost = require('./models/blogpost');
 
 mongoose.connect('mongodb://127.0.0.1:27017/codingblog');
@@ -19,6 +20,7 @@ app.set('views', path.join(__dirname, 'views'))
 
 // This is for Post requests, tells Express to parse the body
 app.use(express.urlencoded({extended: true}))
+app.use(methodOverride('_method'));
 
 // HOME
 app.get('/', (req, res) => {
@@ -45,11 +47,21 @@ app.post('/blogposts', async (req, res) => {
 
 // Show More Page
 app.get('/blogposts/:id', async (req, res) => {
-  const blogposts = await BlogPost.findById(req.params.id)
-  res.render('blogposts/show', {blogposts})
+  const blogpost = await BlogPost.findById(req.params.id)
+  res.render('blogposts/show', {blogpost})
 })
 
+// Edit Post
+app.get('/blogposts/:id/edit', async (req, res) => {
+  const blogpost = await BlogPost.findById(req.params.id);
+  res.render('blogposts/edit', {blogpost})
+})
 
+app.put('/blogposts/:id', async (req, res) => {
+  const { id } = req.params;
+  const blogpost = await BlogPost.findByIdAndUpdate(id, {...req.body.blogpost});
+  res.redirect(`/blogposts/${blogpost._id}`)
+})
 
 app.listen(3000, () => {
   console.log('Serving on Port 3000')
