@@ -9,6 +9,11 @@
   <h1><%= blogpost.title %></h1>
   <h4><%= blogpost.body  %></h4>
   <p><a href="/blogposts/<%= blogpost._id %>/edit">Edit Post</a></p>
+  <p>
+    <form action="/blogposts/<%= blogpost._id %>?_method=DELETE" method="POST">
+      <button>Delete</button>
+    </form>
+  </p>
   <footer>
     <a href="/blogposts">All BlogPosts</a>
   </footer>

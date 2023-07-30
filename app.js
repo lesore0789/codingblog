@@ -63,6 +63,13 @@ app.put('/blogposts/:id', async (req, res) => {
   res.redirect(`/blogposts/${blogpost._id}`)
 })
 
+// Delete Post
+app.delete('/blogposts/:id', async (req, res) => {
+  const { id } = req.params;
+  await BlogPost.findByIdAndDelete(id);
+  res.redirect('/blogposts')
+})
+
 app.listen(3000, () => {
   console.log('Serving on Port 3000')
 })
