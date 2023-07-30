@@ -9,7 +9,7 @@
   <h1>All Blog Posts</h1>
   <ul>
     <% for(let blogpost of blogposts) { %>
-      <li><%= blogpost.title %></li>
+      <li><a href="/blogposts/<%= blogpost._id %>"><%= blogpost.title %></a></li>
       <% } %>
   </ul>
 </body>

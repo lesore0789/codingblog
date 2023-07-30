@@ -25,6 +25,11 @@ app.get('/blogposts', async (req, res) => {
   res.render('blogposts/index', {blogposts})
 })
 
+app.get('/blogposts/:id', async (req, res) => {
+  const blogposts = await BlogPost.findById(req.params.id)
+  res.render('blogposts/show', {blogposts})
+})
+
 app.listen(3000, () => {
   console.log('Serving on Port 3000')
 })
