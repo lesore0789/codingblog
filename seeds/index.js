@@ -1,6 +1,6 @@
 
 const mongoose = require('mongoose');
-const {titles, paragraphs} = require('./seedHelpers');
+const {titles, paragraphs, images} = require('./seedHelpers');
 const BlogPost = require('../models/blogpost');
 
 mongoose.connect('mongodb://127.0.0.1:27017/codingblog');
@@ -17,7 +17,8 @@ const seedDB = async() => {
     const random20 = Math.floor(Math.random() * 20);
     const blog = new BlogPost({
       title: `${titles[random20]}`,
-      body: `${paragraphs[random20]}`
+      body: `${paragraphs[random20]}`,
+      image: `${images[random20]}`,
     })
     await blog.save();
   }
