@@ -1,11 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BlogPosts</title>
-</head>
-<body>
+<% layout('layouts/boilerplate') %>
   <h1>All Blog Posts</h1>
   <div>
     <a href="/blogposts/new">New Post</a>
@@ -15,5 +8,3 @@
       <li><a href="/blogposts/<%= blogpost._id %>"><%= blogpost.title %></a></li>
       <% } %>
   </ul>
-</body>
-</html>

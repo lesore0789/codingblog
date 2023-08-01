@@ -1,11 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Edit Post</title>
-</head>
-<body>
+<% layout('layouts/boilerplate') %>
+
   <h1>Edit Post</h1>
   <form action="/blogposts/<%= blogpost._id %>?_method=PUT" method="POST">
     <div>
@@ -21,5 +15,3 @@
     </div>
   </form>
   <a href="/blogposts/<%= blogpost._id %>">Back to Post</a>
-</body>
-</html>

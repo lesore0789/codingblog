@@ -1,11 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BlogPosts In Depth</title>
-</head>
-<body>
+<% layout('layouts/boilerplate') %>
+
   <h1><%= blogpost.title %></h1>
   <h4><%= blogpost.body  %></h4>
   <p><a href="/blogposts/<%= blogpost._id %>/edit">Edit Post</a></p>
@@ -17,5 +11,3 @@
   <footer>
     <a href="/blogposts">All BlogPosts</a>
   </footer>
-</body>
-</html>

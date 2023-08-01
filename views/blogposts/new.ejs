@@ -1,11 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Create New Post</title>
-</head>
-<body>
+<% layout('layouts/boilerplate') %>
+
   <form action="/blogposts" method="POST">
     <div>
       <label for="title">Title</label>
@@ -20,5 +14,3 @@
     </div>
   </form>
   <a href="/blogposts">All Blog Posts</a>
-</body>
-</html>
