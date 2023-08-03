@@ -1,17 +1,25 @@
 <% layout('layouts/boilerplate') %>
 
-  <h1>Edit Post</h1>
-  <form action="/blogposts/<%= blogpost._id %>?_method=PUT" method="POST">
-    <div>
-      <label for="title">Title</label>
-      <input type="text" id="title" name="blogpost[title]" value="<%= blogpost.title %>">
+  <div class="row">
+    <h1 class="text-center">Edit Post</h1>
+    <div class="col-6 offset-3">
+      <form action="/blogposts/<%= blogpost._id %>?_method=PUT" method="POST">
+        <div class="mb-3">
+          <label class="form-label" for="title">Title</label>
+          <input class="form-control" type="text" id="title" name="blogpost[title]" value="<%= blogpost.title %>">
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="image">Image URL</label>
+          <input class="form-control" type="text" id="image" name="blogpost[image]" value="<%= blogpost.image %>">
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="body">Body</label>
+          <textarea class="form-control" type="text" id="body" name="blogpost[body]"><%= blogpost.body %></textarea>
+        </div>
+        <div class="mb-3">
+          <button class="btn btn-info">Update Post</button>
+        </div>
+      </form>
+      <a href="/blogposts/<%= blogpost._id %>">Back to Post</a>
     </div>
-    <div>
-      <label for="body">Body</label>
-      <input type="text" id="body" name="blogpost[body]" value="<%= blogpost.body %>">
-    </div>
-    <div>
-      <button>Update Post</button>
-    </div>
-  </form>
-  <a href="/blogposts/<%= blogpost._id %>">Back to Post</a>
+  </div>
