@@ -1,7 +1,8 @@
 const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
-const ejsMate = require('ejs-mate')
+const ejsMate = require('ejs-mate');
+const catchAsync = require('./utils/catchAsync');
 const methodOverride = require('method-override');
 const BlogPost = require('./models/blogpost');
 
@@ -40,35 +41,40 @@ app.get('/blogposts/new', (req, res) => {
 })
 
 // Submitting the new Post
-app.post('/blogposts', async (req, res) => {
+app.post('/blogposts', catchAsync(async (req, res, next) => {
   const blogpost = new BlogPost(req.body.blogpost);
   await blogpost.save();
   res.redirect(`/blogposts/${blogpost._id}`)
-})
+}))
 
 // Show More Page
-app.get('/blogposts/:id', async (req, res) => {
+app.get('/blogposts/:id', catchAsync(async (req, res) => {
   const blogpost = await BlogPost.findById(req.params.id)
   res.render('blogposts/show', {blogpost})
-})
+}))
 
 // Edit Post
-app.get('/blogposts/:id/edit', async (req, res) => {
+app.get('/blogposts/:id/edit', catchAsync(async (req, res) => {
   const blogpost = await BlogPost.findById(req.params.id);
   res.render('blogposts/edit', {blogpost})
-})
+}))
 
-app.put('/blogposts/:id', async (req, res) => {
+app.put('/blogposts/:id', catchAsync(async (req, res) => {
   const { id } = req.params;
   const blogpost = await BlogPost.findByIdAndUpdate(id, {...req.body.blogpost});
   res.redirect(`/blogposts/${blogpost._id}`)
-})
+}))
 
 // Delete Post
-app.delete('/blogposts/:id', async (req, res) => {
+app.delete('/blogposts/:id', catchAsync(async (req, res) => {
   const { id } = req.params;
   await BlogPost.findByIdAndDelete(id);
   res.redirect('/blogposts')
+}))
+
+// Error
+app.use((err, req, res, next) => {
+  res.send('Something went wrong')
 })
 
 app.listen(3000, () => {
