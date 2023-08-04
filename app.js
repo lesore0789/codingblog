@@ -3,6 +3,7 @@ const path = require('path');
 const mongoose = require('mongoose');
 const ejsMate = require('ejs-mate');
 const catchAsync = require('./utils/catchAsync');
+const ExpressError = require('./utils/ExpressError');
 const methodOverride = require('method-override');
 const BlogPost = require('./models/blogpost');
 
@@ -42,6 +43,7 @@ app.get('/blogposts/new', (req, res) => {
 
 // Submitting the new Post
 app.post('/blogposts', catchAsync(async (req, res, next) => {
+  if(!req.body.blogpost) throw new ExpressError('Invalid BlogPost Data', 400);
   const blogpost = new BlogPost(req.body.blogpost);
   await blogpost.save();
   res.redirect(`/blogposts/${blogpost._id}`)
@@ -72,9 +74,15 @@ app.delete('/blogposts/:id', catchAsync(async (req, res) => {
   res.redirect('/blogposts')
 }))
 
+app.all('*', (req, res, next) => {
+  next(new ExpressError('Page Not Found', 404))
+})
+
 // Error
 app.use((err, req, res, next) => {
-  res.send('Something went wrong')
+  const {statusCode = 500} = err;
+  if(!err.message) err.message = 'Something Went Wrong'
+  res.status(statusCode).render('error', { err })
 })
 
 app.listen(3000, () => {
