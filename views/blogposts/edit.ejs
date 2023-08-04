@@ -3,18 +3,18 @@
   <div class="row">
     <h1 class="text-center">Edit Post</h1>
     <div class="col-6 offset-3">
-      <form action="/blogposts/<%= blogpost._id %>?_method=PUT" method="POST">
+      <form action="/blogposts/<%= blogpost._id %>?_method=PUT" method="POST" novalidate class="validated-form">
         <div class="mb-3">
           <label class="form-label" for="title">Title</label>
-          <input class="form-control" type="text" id="title" name="blogpost[title]" value="<%= blogpost.title %>">
+          <input class="form-control" type="text" id="title" name="blogpost[title]" value="<%= blogpost.title %>" required>
         </div>
         <div class="mb-3">
           <label class="form-label" for="image">Image URL</label>
-          <input class="form-control" type="text" id="image" name="blogpost[image]" value="<%= blogpost.image %>">
+          <input class="form-control" type="text" id="image" name="blogpost[image]" value="<%= blogpost.image %>" required>
         </div>
         <div class="mb-3">
           <label class="form-label" for="body">Body</label>
-          <textarea class="form-control" type="text" id="body" name="blogpost[body]"><%= blogpost.body %></textarea>
+          <textarea class="form-control" type="text" id="body" name="blogpost[body]" required><%= blogpost.body %></textarea>
         </div>
         <div class="mb-3">
           <button class="btn btn-info">Update Post</button>
