@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
 const ejsMate = require('ejs-mate');
-const Joi = require('joi');
+const { blogPostSchema } = require('./schemas.js')
 const catchAsync = require('./utils/catchAsync');
 const ExpressError = require('./utils/ExpressError');
 const methodOverride = require('method-override');
@@ -26,6 +26,16 @@ app.set('views', path.join(__dirname, 'views'))
 app.use(express.urlencoded({extended: true}))
 app.use(methodOverride('_method'));
 
+const validateBlogPost = (req, res, next) => {
+  const { error } = blogPostSchema.validate(req.body);
+  if(error) {
+    const msg = error.details.map(el => el.message).join(',');
+    throw new ExpressError(msg, 400)
+  } else {
+    next();
+  }
+};
+
 // HOME
 app.get('/', (req, res) => {
   res.render('home')
@@ -43,20 +53,8 @@ app.get('/blogposts/new', (req, res) => {
 })
 
 // Submitting the new Post
-app.post('/blogposts', catchAsync(async (req, res, next) => {
+app.post('/blogposts', validateBlogPost, catchAsync(async (req, res, next) => {
   // if(!req.body.blogpost) throw new ExpressError('Invalid BlogPost Data', 400);
-  const blogPostSchema = Joi.object({
-    blogpost: Joi.object({
-      title: Joi.string().required(),
-      image: Joi.string().required(),
-      body: Joi.string().required()
-    }).required()
-  })
-  const { error } = blogPostSchema.validate(req.body);
-  if(error) {
-    const msg = error.details.map(el => el.message).join(',');
-    throw new ExpressError(msg, 400)
-  }
   const blogpost = new BlogPost(req.body.blogpost);
   await blogpost.save();
   res.redirect(`/blogposts/${blogpost._id}`)
@@ -74,7 +72,7 @@ app.get('/blogposts/:id/edit', catchAsync(async (req, res) => {
   res.render('blogposts/edit', {blogpost})
 }))
 
-app.put('/blogposts/:id', catchAsync(async (req, res) => {
+app.put('/blogposts/:id', validateBlogPost, catchAsync(async (req, res) => {
   const { id } = req.params;
   const blogpost = await BlogPost.findByIdAndUpdate(id, {...req.body.blogpost});
   res.redirect(`/blogposts/${blogpost._id}`)
