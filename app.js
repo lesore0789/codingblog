@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
 const ejsMate = require('ejs-mate');
+const Joi = require('joi');
 const catchAsync = require('./utils/catchAsync');
 const ExpressError = require('./utils/ExpressError');
 const methodOverride = require('method-override');
@@ -43,7 +44,19 @@ app.get('/blogposts/new', (req, res) => {
 
 // Submitting the new Post
 app.post('/blogposts', catchAsync(async (req, res, next) => {
-  if(!req.body.blogpost) throw new ExpressError('Invalid BlogPost Data', 400);
+  // if(!req.body.blogpost) throw new ExpressError('Invalid BlogPost Data', 400);
+  const blogPostSchema = Joi.object({
+    blogpost: Joi.object({
+      title: Joi.string().required(),
+      image: Joi.string().required(),
+      body: Joi.string().required()
+    }).required()
+  })
+  const { error } = blogPostSchema.validate(req.body);
+  if(error) {
+    const msg = error.details.map(el => el.message).join(',');
+    throw new ExpressError(msg, 400)
+  }
   const blogpost = new BlogPost(req.body.blogpost);
   await blogpost.save();
   res.redirect(`/blogposts/${blogpost._id}`)
