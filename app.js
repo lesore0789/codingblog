@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
 const ejsMate = require('ejs-mate');
-const { blogPostSchema } = require('./schemas.js')
+const { blogPostSchema, commentSchema } = require('./schemas.js')
 const catchAsync = require('./utils/catchAsync');
 const ExpressError = require('./utils/ExpressError');
 const methodOverride = require('method-override');
@@ -36,6 +36,16 @@ const validateBlogPost = (req, res, next) => {
     next();
   }
 };
+
+const validateComment = (req, res, next) => {
+  const { error } = commentSchema.validate(req.body);
+  if(error) {
+    const msg = error.details.map(el => el.message).join(',');
+    throw new ExpressError(msg, 400)
+  } else {
+    next();
+  }
+}
 
 // HOME
 app.get('/', (req, res) => {
@@ -87,7 +97,7 @@ app.delete('/blogposts/:id', catchAsync(async (req, res) => {
 }))
 
 // Comment Routes
-app.post('/blogposts/:id/comments', catchAsync(async (req, res) => {
+app.post('/blogposts/:id/comments', validateComment, catchAsync(async (req, res) => {
   const blogpost = await BlogPost.findById(req.params.id);
   const comment = new Comment(req.body.comment);
   blogpost.comments.push(comment);

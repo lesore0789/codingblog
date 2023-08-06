@@ -7,3 +7,10 @@ module.exports.blogPostSchema = Joi.object({
     body: Joi.string().required()
   }).required()
 });
+
+module.exports.commentSchema = Joi.object({
+  comment: Joi.object({
+    body: Joi.string().required(),
+    rating: Joi.number().required()
+  }).required()
+});
