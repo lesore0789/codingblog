@@ -7,6 +7,7 @@ const catchAsync = require('./utils/catchAsync');
 const ExpressError = require('./utils/ExpressError');
 const methodOverride = require('method-override');
 const BlogPost = require('./models/blogpost');
+const Comment = require('./models/comment.js')
 
 mongoose.connect('mongodb://127.0.0.1:27017/codingblog');
 
@@ -83,6 +84,16 @@ app.delete('/blogposts/:id', catchAsync(async (req, res) => {
   const { id } = req.params;
   await BlogPost.findByIdAndDelete(id);
   res.redirect('/blogposts')
+}))
+
+// Comment Routes
+app.post('/blogposts/:id/comments', catchAsync(async (req, res) => {
+  const blogpost = await BlogPost.findById(req.params.id);
+  const comment = new Comment(req.body.comment);
+  blogpost.comments.push(comment);
+  await comment.save();
+  await blogpost.save();
+  res.redirect(`/blogposts/${blogpost._id}`)
 }))
 
 app.all('*', (req, res, next) => {
