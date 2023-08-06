@@ -6,8 +6,13 @@ const BlogPostSchema = new Schema({
   subTitle: String,
   image: String,
   date: Date,
-  body: String
-
+  body: String,
+  comment: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Comment'
+    }
+  ]
 })
 
 module.exports = mongoose.model('BlogPost', BlogPostSchema)
