@@ -32,6 +32,9 @@
         <div class="card-body">
           <h5 class="card-title">Rating: <%= comment.rating %></h5>
           <p class="card-text">Comment: <%= comment.body %></p>
+          <form action="/blogposts/<%= blogpost._id %>/comments/<%= comment._id %>?_method=DELETE" method="POST">
+            <button class="btn btn-sm btn-danger">Delete</button>
+          </form>
         </div>
       </div>
 
