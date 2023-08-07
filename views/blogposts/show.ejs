@@ -28,10 +28,13 @@
       <button class="btn btn-success">Submit</button>
     </form>
     <% for(let comment of blogpost.comments) { %>
-      <div class="mb-3">
-        <p>Rating: <%= comment.rating %></p>
-        <p>Comment: <%= comment.body %></p>
+      <div class="card mb-3 ">
+        <div class="card-body">
+          <h5 class="card-title">Rating: <%= comment.rating %></h5>
+          <p class="card-text">Comment: <%= comment.body %></p>
+        </div>
       </div>
+
     <% } %>
   </div>
 </div>
