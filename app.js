@@ -73,7 +73,7 @@ app.post('/blogposts', validateBlogPost, catchAsync(async (req, res, next) => {
 
 // Show More Page
 app.get('/blogposts/:id', catchAsync(async (req, res) => {
-  const blogpost = await BlogPost.findById(req.params.id)
+  const blogpost = await BlogPost.findById(req.params.id).populate('comments');
   res.render('blogposts/show', {blogpost})
 }))
 
