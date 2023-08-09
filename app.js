@@ -2,12 +2,9 @@ const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
 const ejsMate = require('ejs-mate');
-const { blogPostSchema, commentSchema } = require('./schemas.js');
-const catchAsync = require('./utils/catchAsync');
 const ExpressError = require('./utils/ExpressError');
 const methodOverride = require('method-override');
-const BlogPost = require('./models/blogpost');
-const Comment = require('./models/comment.js');
+
 
 const blogposts = require('./routes/blogposts.js')
 const comments = require('./routes/comments.js')
