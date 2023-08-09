@@ -2,12 +2,14 @@ const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
 const ejsMate = require('ejs-mate');
-const { blogPostSchema, commentSchema } = require('./schemas.js')
+const { blogPostSchema, commentSchema } = require('./schemas.js');
 const catchAsync = require('./utils/catchAsync');
 const ExpressError = require('./utils/ExpressError');
 const methodOverride = require('method-override');
 const BlogPost = require('./models/blogpost');
-const Comment = require('./models/comment.js')
+const Comment = require('./models/comment.js');
+
+const blogposts = require('./routes/blogposts.js')
 
 mongoose.connect('mongodb://127.0.0.1:27017/codingblog');
 
@@ -27,15 +29,6 @@ app.set('views', path.join(__dirname, 'views'))
 app.use(express.urlencoded({extended: true}))
 app.use(methodOverride('_method'));
 
-const validateBlogPost = (req, res, next) => {
-  const { error } = blogPostSchema.validate(req.body);
-  if(error) {
-    const msg = error.details.map(el => el.message).join(',');
-    throw new ExpressError(msg, 400)
-  } else {
-    next();
-  }
-};
 
 const validateComment = (req, res, next) => {
   const { error } = commentSchema.validate(req.body);
@@ -47,54 +40,13 @@ const validateComment = (req, res, next) => {
   }
 }
 
+app.use('/blogposts', blogposts)
+
 // HOME
 app.get('/', (req, res) => {
   res.render('home')
 })
 
-// All BlogPosts - Index Page
-app.get('/blogposts', async (req, res) => {
-  const blogposts = await BlogPost.find({})
-  res.render('blogposts/index', {blogposts})
-})
-
-// Create a new post
-app.get('/blogposts/new', (req, res) => {
-  res.render('blogposts/new')
-})
-
-// Submitting the new Post
-app.post('/blogposts', validateBlogPost, catchAsync(async (req, res, next) => {
-  // if(!req.body.blogpost) throw new ExpressError('Invalid BlogPost Data', 400);
-  const blogpost = new BlogPost(req.body.blogpost);
-  await blogpost.save();
-  res.redirect(`/blogposts/${blogpost._id}`)
-}))
-
-// Show More Page
-app.get('/blogposts/:id', catchAsync(async (req, res) => {
-  const blogpost = await BlogPost.findById(req.params.id).populate('comments');
-  res.render('blogposts/show', {blogpost})
-}))
-
-// Edit Post
-app.get('/blogposts/:id/edit', catchAsync(async (req, res) => {
-  const blogpost = await BlogPost.findById(req.params.id);
-  res.render('blogposts/edit', {blogpost})
-}))
-
-app.put('/blogposts/:id', validateBlogPost, catchAsync(async (req, res) => {
-  const { id } = req.params;
-  const blogpost = await BlogPost.findByIdAndUpdate(id, {...req.body.blogpost});
-  res.redirect(`/blogposts/${blogpost._id}`)
-}))
-
-// Delete Post
-app.delete('/blogposts/:id', catchAsync(async (req, res) => {
-  const { id } = req.params;
-  await BlogPost.findByIdAndDelete(id);
-  res.redirect('/blogposts')
-}))
 
 // Comment Routes
 app.post('/blogposts/:id/comments', validateComment, catchAsync(async (req, res) => {
