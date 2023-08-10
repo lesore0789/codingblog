@@ -31,6 +31,7 @@ router.post('/', validateBlogPost, catchAsync(async (req, res, next) => {
   // if(!req.body.blogpost) throw new ExpressError('Invalid BlogPost Data', 400);
   const blogpost = new BlogPost(req.body.blogpost);
   await blogpost.save();
+  req.flash('success', 'Successfully made a new Blog Post!')
   res.redirect(`/blogposts/${blogpost._id}`)
 }))
 
