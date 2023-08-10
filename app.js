@@ -27,6 +27,9 @@ app.set('views', path.join(__dirname, 'views'))
 app.use(express.urlencoded({extended: true}))
 app.use(methodOverride('_method'));
 
+// Tells Express to serve our public directory
+app.use(express.static(path.join(__dirname, 'public')))
+
 
 app.use('/blogposts', blogposts);
 app.use('/blogposts/:id/comments', comments)
