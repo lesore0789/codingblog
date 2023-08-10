@@ -38,6 +38,10 @@ router.post('/', validateBlogPost, catchAsync(async (req, res, next) => {
 // Show More Page
 router.get('/:id', catchAsync(async (req, res) => {
   const blogpost = await BlogPost.findById(req.params.id).populate('comments');
+  if(!blogpost){
+    req.flash('error', 'Cannot find that blogpost');
+    return res.redirect('/blogposts')
+  }
   res.render('blogposts/show', {blogpost})
 }))
 
