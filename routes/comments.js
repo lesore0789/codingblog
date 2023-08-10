@@ -23,6 +23,7 @@ router.post('/', validateComment, catchAsync(async (req, res) => {
   blogpost.comments.push(comment);
   await comment.save();
   await blogpost.save();
+  req.flash('success', 'Created new comment')
   res.redirect(`/blogposts/${blogpost._id}`)
 }))
 

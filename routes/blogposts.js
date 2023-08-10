@@ -50,6 +50,7 @@ router.get('/:id/edit', catchAsync(async (req, res) => {
 router.put('/:id', validateBlogPost, catchAsync(async (req, res) => {
   const { id } = req.params;
   const blogpost = await BlogPost.findByIdAndUpdate(id, {...req.body.blogpost});
+  req.flash('success', 'Successfuly updated blogpost');
   res.redirect(`/blogposts/${blogpost._id}`)
 }))
 
