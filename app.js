@@ -10,9 +10,9 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const User = require('./models/user')
 
-
-const blogposts = require('./routes/blogposts.js')
-const comments = require('./routes/comments.js')
+const userRoutes = require('./routes/users')
+const blogpostRoutes = require('./routes/blogposts.js')
+const commentRoutes = require('./routes/comments.js')
 
 mongoose.connect('mongodb://127.0.0.1:27017/codingblog');
 
@@ -63,8 +63,9 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-app.use('/blogposts', blogposts);
-app.use('/blogposts/:id/comments', comments)
+app.use('/', userRoutes);
+app.use('/blogposts', blogpostRoutes);
+app.use('/blogposts/:id/comments', commentRoutes)
 
 // HOME
 app.get('/', (req, res) => {
