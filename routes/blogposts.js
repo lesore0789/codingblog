@@ -3,7 +3,8 @@ const router = express.Router();
 const catchAsync = require('../utils/catchAsync');
 const ExpressError = require('../utils/ExpressError');
 const BlogPost = require('../models/blogpost');
-const { blogPostSchema } = require('../schemas.js')
+const { blogPostSchema } = require('../schemas.js');
+const {isLoggedIn} = require('../middleware');
 
 const validateBlogPost = (req, res, next) => {
   const { error } = blogPostSchema.validate(req.body);
@@ -22,12 +23,12 @@ router.get('/', async (req, res) => {
 })
 
 // Create a new post
-router.get('/new', (req, res) => {
+router.get('/new', isLoggedIn, (req, res) => {
   res.render('blogposts/new')
 })
 
 // Submitting the new Post
-router.post('/', validateBlogPost, catchAsync(async (req, res, next) => {
+router.post('/', isLoggedIn, validateBlogPost, catchAsync(async (req, res, next) => {
   // if(!req.body.blogpost) throw new ExpressError('Invalid BlogPost Data', 400);
   const blogpost = new BlogPost(req.body.blogpost);
   await blogpost.save();
