@@ -8,6 +8,10 @@ const BlogPostSchema = new Schema({
   image: String,
   date: Date,
   body: String,
+  author: {
+    type: Schema.Types.ObjectId,
+    ref: 'User'
+  },
   comments: [
     {
       type: Schema.Types.ObjectId,

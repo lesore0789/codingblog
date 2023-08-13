@@ -6,6 +6,7 @@
       <img src="<%= blogpost.image %>" class="card-img-top" alt="">
       <div class="card-body">
         <h3 class="card-title"><%= blogpost.title %></h3>
+        <h5 class="text-muted">By: <%= blogpost.author.username %></h5>
         <p class="card-text"><%= blogpost.body  %></p>
       </div>
       <div class="card-body">

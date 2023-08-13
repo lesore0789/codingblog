@@ -31,6 +31,7 @@ router.get('/new', isLoggedIn, (req, res) => {
 router.post('/', isLoggedIn, validateBlogPost, catchAsync(async (req, res, next) => {
   // if(!req.body.blogpost) throw new ExpressError('Invalid BlogPost Data', 400);
   const blogpost = new BlogPost(req.body.blogpost);
+  blogpost.author = req.user._id;
   await blogpost.save();
   req.flash('success', 'Successfully made a new Blog Post!')
   res.redirect(`/blogposts/${blogpost._id}`)
@@ -38,7 +39,7 @@ router.post('/', isLoggedIn, validateBlogPost, catchAsync(async (req, res, next)
 
 // Show More Page
 router.get('/:id', catchAsync(async (req, res) => {
-  const blogpost = await BlogPost.findById(req.params.id).populate('comments');
+  const blogpost = await BlogPost.findById(req.params.id).populate('comments').populate('author');
   if(!blogpost){
     req.flash('error', 'Cannot find that blogpost');
     return res.redirect('/blogposts')

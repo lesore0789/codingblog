@@ -17,6 +17,7 @@ const seedDB = async() => {
     const random20 = Math.floor(Math.random() * 20);
     const blog = new BlogPost({
       title: `${titles[random20]}`,
+      author: '64d8b12358f5244d9e1c5461',
       body: `${paragraphs[random20]}`,
       image: `${images[random20]}`,
     })
