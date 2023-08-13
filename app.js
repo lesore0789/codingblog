@@ -49,19 +49,21 @@ app.use(session(sessionConfig))
 
 app.use(flash());
 
-// Flash Middleware
-app.use((req, res, next) => {
-  res.locals.success = req.flash('success');
-  res.locals.error = req.flash('error')
-  next();
-})
-
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new LocalStrategy(User.authenticate()));
 
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
+
+// Flash Middleware
+app.use((req, res, next) => {
+  res.locals.currentUser = req.user;
+  res.locals.success = req.flash('success');
+  res.locals.error = req.flash('error')
+  next();
+})
+
 
 app.use('/', userRoutes);
 app.use('/blogposts', blogpostRoutes);
