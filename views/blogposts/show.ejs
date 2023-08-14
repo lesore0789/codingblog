@@ -18,6 +18,7 @@
       </div>
       <% } %>
     </div>
+    <% if(currentUser) { %>
     <h2>Leave A Comment</h2>
     <form action="/blogposts/<%= blogpost._id %>/comments" method="post" class="validated-form mb-3" novalidate>
       <div class="mb-3">
@@ -30,14 +31,18 @@
       </div>
       <button class="btn btn-success">Submit</button>
     </form>
+    <% } %>
     <% for(let comment of blogpost.comments) { %>
       <div class="card mb-3 ">
         <div class="card-body">
           <h5 class="card-title">Rating: <%= comment.rating %></h5>
-          <p class="card-text">Comment: <%= comment.body %></p>
+          <h6 class="card-subtitle mb-2 text-body-secondary"><%= comment.author.username %> says:</h6>
+          <p class="card-text"><%= comment.body %></p>
+          <% if(currentUser && comment.author.equals(currentUser._id)){ %>
           <form action="/blogposts/<%= blogpost._id %>/comments/<%= comment._id %>?_method=DELETE" method="POST">
             <button class="btn btn-sm btn-danger">Delete</button>
           </form>
+          <% } %>
         </div>
       </div>
 

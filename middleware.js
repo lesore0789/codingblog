@@ -1,6 +1,7 @@
 const { blogPostSchema, commentSchema } = require('./schemas.js');
 const ExpressError = require('./utils/ExpressError.js');
 const BlogPost = require('./models/blogpost');
+const Comment = require('./models/comment.js')
 
 module.exports.isLoggedIn = (req, res, next) => {
   if(!req.isAuthenticated()) {
@@ -46,4 +47,14 @@ module.exports.validateComment = (req, res, next) => {
   } else {
     next();
   }
+}
+
+module.exports.isCommentAuthor = async(req, res, next) => {
+  const {id, commentId} = req.params;
+  const comment = await Comment.findById(commentId);
+  if(!comment.author.equals(req.user._id)){
+    req.flash('error', 'You do not have permission to do that');
+    return res.redirect(`/blogposts/${id}`);
+  }
+  next();
 }

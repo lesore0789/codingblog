@@ -27,7 +27,12 @@ router.post('/', isLoggedIn, validateBlogPost, catchAsync(async (req, res, next)
 
 // Show More Page
 router.get('/:id', catchAsync(async (req, res) => {
-  const blogpost = await BlogPost.findById(req.params.id).populate('comments').populate('author');
+  const blogpost = await BlogPost.findById(req.params.id).populate({
+    path: 'comments',
+    populate: {
+      path: 'author'
+    }
+  }).populate('author');
   if(!blogpost){
     req.flash('error', 'Cannot find that blogpost');
     return res.redirect('/blogposts')
