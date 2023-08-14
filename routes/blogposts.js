@@ -1,20 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const catchAsync = require('../utils/catchAsync');
-const ExpressError = require('../utils/ExpressError');
 const BlogPost = require('../models/blogpost');
-const { blogPostSchema } = require('../schemas.js');
-const {isLoggedIn} = require('../middleware');
-
-const validateBlogPost = (req, res, next) => {
-  const { error } = blogPostSchema.validate(req.body);
-  if(error) {
-    const msg = error.details.map(el => el.message).join(',');
-    throw new ExpressError(msg, 400)
-  } else {
-    next();
-  }
-};
+const {isLoggedIn, validateBlogPost, isAuthor} = require('../middleware');
 
 // All BlogPosts - Index Page
 router.get('/', async (req, res) => {
@@ -48,12 +36,17 @@ router.get('/:id', catchAsync(async (req, res) => {
 }))
 
 // Edit Post
-router.get('/:id/edit', catchAsync(async (req, res) => {
-  const blogpost = await BlogPost.findById(req.params.id);
+router.get('/:id/edit',isLoggedIn, isAuthor, catchAsync(async (req, res) => {
+  const {id} = req.params;
+  const blogpost = await BlogPost.findById(id);
+  if(!blogpost){
+    req.flash('error', 'Cannot find that post');
+    return res.redirect('/blogposts')
+  }
   res.render('blogposts/edit', {blogpost})
 }))
 
-router.put('/:id', validateBlogPost, catchAsync(async (req, res) => {
+router.put('/:id', isLoggedIn, isAuthor, validateBlogPost, catchAsync(async (req, res) => {
   const { id } = req.params;
   const blogpost = await BlogPost.findByIdAndUpdate(id, {...req.body.blogpost});
   req.flash('success', 'Successfuly updated blogpost');
@@ -61,7 +54,7 @@ router.put('/:id', validateBlogPost, catchAsync(async (req, res) => {
 }))
 
 // Delete Post
-router.delete('/:id', catchAsync(async (req, res) => {
+router.delete('/:id', isLoggedIn, isAuthor, catchAsync(async (req, res) => {
   const { id } = req.params;
   await BlogPost.findByIdAndDelete(id);
   res.redirect('/blogposts')
