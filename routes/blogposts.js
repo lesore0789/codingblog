@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const blogposts = require('../controllers/blogposts')
 const catchAsync = require('../utils/catchAsync');
-const BlogPost = require('../models/blogpost');
 const {isLoggedIn, validateBlogPost, isAuthor} = require('../middleware');
 
 // All BlogPosts - Index Page
