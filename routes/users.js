@@ -6,15 +6,15 @@ const passport = require('passport');
 const { storeReturnTo } = require('../middleware');
 
 // Register
-router.get('/register', users.renderRegisterForm);
-
-router.post('/register', catchAsync(users.register));
+router.route('/register')
+  .get(users.renderRegisterForm)
+  .post(catchAsync(users.register));
 
 
 // Login
-router.get('/login', users.renderLoginForm);
-
-router.post('/login', storeReturnTo, passport.authenticate('local', {failureFlash: true, failureRedirect: '/login'}), users.login)
+router.route('/login')
+  .get(users.renderLoginForm)
+  .post(storeReturnTo, passport.authenticate('local', {failureFlash: true, failureRedirect: '/login'}), users.login)
 
 // Logout
 router.get('/logout', users.logout);
