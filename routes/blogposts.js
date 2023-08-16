@@ -3,11 +3,16 @@ const router = express.Router();
 const blogposts = require('../controllers/blogposts')
 const catchAsync = require('../utils/catchAsync');
 const {isLoggedIn, validateBlogPost, isAuthor} = require('../middleware');
+const multer = require('multer');
+const upload = multer({dest: 'uploads/'})
 
 // All BlogPosts - Index Page, Submitting the new Post
 router.route('/')
   .get(catchAsync(blogposts.index))
-  .post(isLoggedIn, validateBlogPost, catchAsync(blogposts.createBlogPost))
+  // .post(isLoggedIn, validateBlogPost, catchAsync(blogposts.createBlogPost))
+  .post(upload.single('image'), (req, res) => {
+    res.send(req.body)
+  })
 
 // Create a new post
 router.get('/new', isLoggedIn, blogposts.renderNewForm)
