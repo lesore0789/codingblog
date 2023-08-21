@@ -19,7 +19,12 @@ const seedDB = async() => {
       title: `${titles[random20]}`,
       author: '64d8b12358f5244d9e1c5461',
       body: `${paragraphs[random20]}`,
-      image: `${images[random20]}`,
+      images: [
+        {
+          url: 'https://res.cloudinary.com/dmdinyjxz/image/upload/v1692601847/CodingBlog/vaw40jqggiumxpybgwf0.jpg',
+          filename: 'CodingBlog/vaw40jqggiumxpybgwf0'
+        }
+      ]
     })
     await blog.save();
   }
