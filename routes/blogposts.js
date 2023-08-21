@@ -18,7 +18,7 @@ router.get('/new', isLoggedIn, blogposts.renderNewForm)
 // Show More Page, Edit Post, Delete Post
 router.route('/:id')
   .get(catchAsync(blogposts.showBlogPost))
-  .put(isLoggedIn, isAuthor, validateBlogPost, catchAsync(blogposts.updateBlogPost))
+  .put(isLoggedIn, isAuthor, upload.array('image'), validateBlogPost, catchAsync(blogposts.updateBlogPost))
   .delete(isLoggedIn, isAuthor, catchAsync(blogposts.deleteBlogPost))
 
 // Edit Form

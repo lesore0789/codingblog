@@ -46,6 +46,9 @@ module.exports.renderEditForm = async (req, res) => {
 module.exports.updateBlogPost = async (req, res) => {
   const { id } = req.params;
   const blogpost = await BlogPost.findByIdAndUpdate(id, {...req.body.blogpost});
+  const imgs = req.files.map(f => ({url: f.path, filename: f.filename}));
+  blogpost.images.push(...imgs);
+  await blogpost.save();
   req.flash('success', 'Successfuly updated blogpost');
   res.redirect(`/blogposts/${blogpost._id}`)
 }
