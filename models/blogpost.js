@@ -5,7 +5,12 @@ const Schema = mongoose.Schema;
 const BlogPostSchema = new Schema({
   title: String,
   subTitle: String,
-  image: String,
+  images: [
+    {
+      url: String,
+      filename: String
+    }
+  ],
   date: Date,
   body: String,
   author: {

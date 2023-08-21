@@ -11,8 +11,10 @@ module.exports.renderNewForm = (req, res) => {
 
 module.exports.createBlogPost = async (req, res, next) => {
   const blogpost = new BlogPost(req.body.blogpost);
+  blogpost.images = req.files.map(f => ({url: f.path, filename: f.filename}));
   blogpost.author = req.user._id;
   await blogpost.save();
+  console.log(blogpost);
   req.flash('success', 'Successfully made a new Blog Post!')
   res.redirect(`/blogposts/${blogpost._id}`)
 }

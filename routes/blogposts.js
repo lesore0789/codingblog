@@ -10,11 +10,7 @@ const upload = multer({ storage });
 // All BlogPosts - Index Page, Submitting the new Post
 router.route('/')
   .get(catchAsync(blogposts.index))
-  // .post(isLoggedIn, validateBlogPost, catchAsync(blogposts.createBlogPost))
-  .post(upload.array('image'), (req, res) => {
-    console.log(req.body, req.files);
-    res.send("it worked?!")
-  })
+  .post(isLoggedIn, upload.array('image'), validateBlogPost, catchAsync(blogposts.createBlogPost))
 
 // Create a new post
 router.get('/new', isLoggedIn, blogposts.renderNewForm)
