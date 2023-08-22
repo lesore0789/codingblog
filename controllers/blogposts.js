@@ -1,4 +1,5 @@
 const BlogPost = require('../models/blogpost');
+const { cloudinary } = require("../cloudinary")
 
 module.exports.index = async (req, res) => {
   const blogposts = await BlogPost.find({})
@@ -49,6 +50,12 @@ module.exports.updateBlogPost = async (req, res) => {
   const imgs = req.files.map(f => ({url: f.path, filename: f.filename}));
   blogpost.images.push(...imgs);
   await blogpost.save();
+  if(req.body.deleteImages) {
+    for (let filename of req.body.deleteImages) {
+      cloudinary.uploader.destroy(filename);
+    }
+    await blogpost.updateOne({$pull: {images: {filename: {$in: req.body.deleteImages}}}})
+  }
   req.flash('success', 'Successfuly updated blogpost');
   res.redirect(`/blogposts/${blogpost._id}`)
 }

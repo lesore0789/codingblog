@@ -5,7 +5,8 @@ module.exports.blogPostSchema = Joi.object({
     title: Joi.string().required(),
     // image: Joi.string().required(),
     body: Joi.string().required()
-  }).required()
+  }).required(),
+  deleteImages: Joi.array()
 });
 
 module.exports.commentSchema = Joi.object({
