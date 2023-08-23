@@ -12,7 +12,8 @@ const ExpressError = require('./utils/ExpressError');
 const methodOverride = require('method-override');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
-const User = require('./models/user')
+const User = require('./models/user');
+const mongoSanitize = require('express-mongo-sanitize');
 
 const userRoutes = require('./routes/users')
 const blogpostRoutes = require('./routes/blogposts.js')
@@ -38,6 +39,8 @@ app.use(methodOverride('_method'));
 
 // Tells Express to serve our public directory
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(mongoSanitize());
 
 const sessionConfig = {
   secret: 'thisshouldbeasecret',
