@@ -40,7 +40,9 @@ app.use(methodOverride('_method'));
 // Tells Express to serve our public directory
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(mongoSanitize());
+app.use(mongoSanitize({
+  replaceWith: '_'
+}))
 
 const sessionConfig = {
   secret: 'thisshouldbeasecret',
