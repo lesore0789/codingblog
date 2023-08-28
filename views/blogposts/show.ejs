@@ -5,7 +5,7 @@
   <div class="col-8 offset-2">
     <div class="card mb-5">
       <% for(let img of blogpost.images) {%>
-      <img src="<%= img.url %>" class="card-img-top" alt="">
+      <img crossorigin="anonymous" src="<%= img.url %>" class="card-img-top" alt="">
       <% } %>
       <div class="card-body">
         <h3 class="card-title"><%= blogpost.title %></h3>
