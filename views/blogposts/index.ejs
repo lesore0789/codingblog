@@ -1,8 +1,5 @@
 <% layout('layouts/boilerplate') %>
   <h1>All Blog Posts</h1>
-  <div>
-    <a href="/blogposts/new">New Post</a>
-  </div>
     <% for(let blogpost of blogposts) { %>
       <div class="card mb-3">
         <div class="row">
@@ -12,7 +9,7 @@
           <div class="col-md-8">
             <div class="card-body">
               <h5 class="card-title"><%= blogpost.title %></h5>
-              <p class="card-text"><%= blogpost.body %></p>
+              <p class="card-text"><%- blogpost.body %></p>
               <a class="btn btn-primary" href="/blogposts/<%=blogpost._id  %>">View Post</a>
             </div>
           </div>
