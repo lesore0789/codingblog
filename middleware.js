@@ -32,11 +32,12 @@ module.exports.validateBlogPost = (req, res, next) => {
 module.exports.isAuthor = async(req, res, next) => {
   const {id} = req.params;
   const blogpost = await BlogPost.findById(id);
-  if(!blogpost.author.equals(req.user._id)){
+  if(blogpost.author.equals(req.user._id) || req.user.isAdmin){
+    next()
+  } else {
     req.flash('error', 'You do not have permission to do that');
     return res.redirect(`/blogposts/${id}`);
   }
-  next();
 }
 
 module.exports.validateComment = (req, res, next) => {
@@ -52,9 +53,10 @@ module.exports.validateComment = (req, res, next) => {
 module.exports.isCommentAuthor = async(req, res, next) => {
   const {id, commentId} = req.params;
   const comment = await Comment.findById(commentId);
-  if(!comment.author.equals(req.user._id)){
+  if(comment.author.equals(req.user._id) || req.user.isAdmin){
+    next()
+  } else {
     req.flash('error', 'You do not have permission to do that');
     return res.redirect(`/blogposts/${id}`);
   }
-  next();
 }

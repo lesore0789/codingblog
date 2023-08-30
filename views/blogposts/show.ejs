@@ -12,7 +12,7 @@
         <h5 class="text-muted">By: <%= blogpost.author.username %></h5>
         <p class="card-text"><%= blogpost.body  %></p>
       </div>
-      <% if(currentUser && blogpost.author.equals(currentUser._id)){ %>
+      <% if(currentUser && blogpost.author.equals(currentUser._id) || currentUser && currentUser.isAdmin){ %>
       <div class="card-body">
         <a class="card-link btn btn-info" href="/blogposts/<%= blogpost._id %>/edit">Edit Post</a>
         <form class="d-inline" action="/blogposts/<%= blogpost._id %>?_method=DELETE" method="POST">
@@ -54,7 +54,7 @@
           </p>
           <h6 class="card-subtitle mb-2 text-body-secondary"><%= comment.author.username %> says:</h6>
           <p class="card-text"><%= comment.body %></p>
-          <% if(currentUser && comment.author.equals(currentUser._id)){ %>
+          <% if(currentUser && comment.author.equals(currentUser._id) || currentUser && currentUser.isAdmin){ %>
           <form action="/blogposts/<%= blogpost._id %>/comments/<%= comment._id %>?_method=DELETE" method="POST">
             <button class="btn btn-sm btn-danger">Delete</button>
           </form>

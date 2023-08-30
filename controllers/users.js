@@ -6,8 +6,11 @@ module.exports.renderRegisterForm = (req, res) => {
 
 module.exports.register = async(req, res, next) => {
   try {
-    const {email, username, password} = req.body;
+    const {email, username, password, adminCode} = req.body;
     const user = new User({email, username});
+    if(adminCode === process.env.ADMIN_CODE) {
+      user.isAdmin = true;
+    }
     const registeredUser = await User.register(user, password);
     req.login(registeredUser, err => {
       if(err) return next(err);
